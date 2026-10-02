@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le Radici dell'IA | Viewer Pubblico</title>
+  <meta name="description" content="Poster interattivo pubblico per esplorare i livelli di rischio dell'Intelligenza Artificiale in modo accessibile e mobile-friendly.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section id="adventureIntro" class="adventure-intro" aria-labelledby="adventureIntroTitle">
+    <div class="adventure-intro-shell">
+      <div class="adventure-intro-topline">
+        <span class="intro-live-indicator">SEGNALE ATTIVO</span>
+        <span class="intro-topline-divider"></span>
+        <span>RETE CIVICA // ARCHIVIO 01</span>
+        <span class="intro-session-code">SESSIONE 001</span>
+      </div>
+
+      <div class="adventure-network" aria-hidden="true">
+        <span class="network-link network-link-one"></span>
+        <span class="network-link network-link-two"></span>
+        <span class="network-link network-link-three"></span>
+        <span class="network-link network-link-four"></span>
+        <span class="network-link network-link-five"></span>
+        <span class="network-link network-link-six"></span>
+        <span class="network-packet network-packet-one"></span>
+        <span class="network-packet network-packet-two"></span>
+        <span class="network-packet network-packet-three"></span>
+        <span class="network-node network-node-one"><span>01</span><b>DEEPFAKE</b></span>
+        <span class="network-node network-node-two"><span>02</span><b>FACT-CHECK</b></span>
+        <span class="network-node network-node-three"><span>03</span><b>PRIVACY</b></span>
+        <span class="network-node network-node-four"><span>04</span><b>BIAS</b></span>
+        <span class="network-node network-node-five"><span>05</span><b>SUPERVISIONE</b></span>
+        <span class="network-node network-node-six"><span>06</span><b>SOCIAL SCORE</b></span>
+      </div>
+
+      <main class="adventure-intro-center">
+        <p class="adventure-intro-eyebrow">UN ARCHIVIO DA ESPLORARE</p>
+        <p id="adventureIntroTitle" class="adventure-intro-title">Pronto ad avventurarti, Gnomo?</p>
+        <p class="adventure-intro-copy">Dall'uso consapevole dell'IA alle decisioni automatiche: esplora rischi, responsabilità e diritti.</p>
+        <div class="adventure-network-feed" aria-label="Temi principali del percorso">
+          <p class="network-message network-message-one network-message-minimum"><span>RISCHIO MINIMO / PROFILI</span><strong>Deepfake e profili falsi</strong><small>Verifica la fonte, non fermarti all'apparenza.</small></p>
+          <p class="network-message network-message-two network-message-minimum"><span>RISCHIO MINIMO / PRIVACY</span><strong>Fact-checking e privacy</strong><small>Controlla le risposte, proteggi i tuoi dati.</small></p>
+          <p class="network-message network-message-three network-message-minimum"><span>RISCHIO MINIMO / MINORI</span><strong>Chatbot, agenti e Kids Act</strong><small>Usa gli strumenti con consapevolezza e tutela i minori.</small></p>
+          <p class="network-message network-message-four network-message-high"><span>ALTO RISCHIO / LAVORO</span><strong>Bias nella selezione</strong><small>I dati del passato possono replicare discriminazioni.</small></p>
+          <p class="network-message network-message-five network-message-high"><span>ALTO RISCHIO / FEEDBACK</span><strong>Decisioni che si autoalimentano</strong><small>I feedback loop possono amplificare gli errori.</small></p>
+          <p class="network-message network-message-six network-message-high"><span>ALTO RISCHIO / PERSONE</span><strong>Supervisione a scuola e in sanità</strong><small>L'IA assiste; la decisione resta alle persone.</small></p>
+          <p class="network-message network-message-seven network-message-unacceptable"><span>INACCETTABILE / LIBERTÀ</span><strong>Social scoring</strong><small>La libertà non può ridursi a un punteggio.</small></p>
+          <p class="network-message network-message-eight network-message-unacceptable"><span>INACCETTABILE / AUTONOMIA</span><strong>Manipolazione subliminale</strong><small>Le scelte devono restare davvero libere.</small></p>
+          <p class="network-message network-message-nine network-message-unacceptable"><span>INACCETTABILE / SORVEGLIANZA</span><strong>Polizia predittiva e scraping</strong><small>Diritti e privacy non sono merce di scambio.</small></p>
+        </div>
+        <button id="startAdventureBtn" class="adventure-intro-button" type="button">
+          <span>Certo, partiamo</span><span aria-hidden="true">→</span>
+        </button>
+      </main>
+
+      <footer class="adventure-intro-credits">
+        <span>IDEATO E REALIZZATO DA</span>
+        <p>Ludovico Mariani <i>·</i> Diego Impellizzeri <i>·</i> Parisi Xavier</p>
+      </footer>
+    </div>
+  </section>
+
+  <div id="crtOverlay" class="crt-overlay"></div>
+
+  <header class="pixel-header">
+    <div class="brand-title">
+      <span class="brand-icon"></span>
+      <h1>LE RADICI DELL'IA</h1>
+    </div>
+
+    <div class="nav-controls">
+      <div id="musicControl" class="pixel-music-control" aria-live="polite">
+        <button id="prevMusicBtn" class="pixel-btn music-btn" type="button" aria-label="Traccia precedente">◄</button>
+        <span id="currentMusicTitle" class="music-title" aria-label="Caricamento...">
+          <span class="music-title-track"><span class="music-title-copy">Caricamento...</span></span>
+        </span>
+        <button id="nextMusicBtn" class="pixel-btn music-btn" type="button" aria-label="Traccia successiva">►</button>
+      </div>
+
+      <button class="pixel-btn tier-low" data-jump="350" type="button">MINIMO</button>
+      <button class="pixel-btn tier-high" data-jump="1200" type="button">ALTO RISCHIO</button>
+      <button class="pixel-btn tier-unacceptable" data-jump="2050" type="button">INACCETTABILE</button>
+
+      <div class="search-wrapper">
+        <input type="text" id="searchInput" class="pixel-input" placeholder="Cerca..." aria-label="Cerca tra gli argomenti">
+      </div>
+
+      <button id="musicToggleBtn" class="pixel-btn" type="button" aria-label="Disattiva o riattiva la musica">MUSICA ON</button>
+      <button id="sfxToggleBtn" class="pixel-btn" type="button" aria-label="Disattiva o riattiva gli effetti sonori">SUONI ON</button>
+      <button id="crtToggleBtn" class="pixel-btn" type="button" aria-label="Attiva o disattiva effetto CRT">CRT ON</button>
+      <button id="viewToggleBtn" class="pixel-btn" type="button" aria-label="Passa tra poster e griglia">GRIGLIA</button>
+    </div>
+  </header>
+
+  <main id="posterContainer" class="canvas-wrapper">
+    <canvas id="treeCanvas" aria-label="Mappa interattiva delle radici dell'IA"></canvas>
+
+    <div id="pixelTooltip" class="pixel-tooltip" role="status" aria-live="polite">
+      <div id="tooltipTitle" class="pixel-tooltip-title"></div>
+      <div id="tooltipBadge" class="pixel-tooltip-badge"></div>
+    </div>
+  </main>
+
+  <section id="gridViewContainer" class="grid-view-container" aria-live="polite"></section>
+
+  <div id="modalBackdrop" class="pixel-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div id="modalCard" class="pixel-modal-card tier-low">
+      <div class="modal-header-bar">
+        <span id="modalBadge" class="modal-badge">RISCHIO MINIMO</span>
+        <button id="modalCloseBtn" class="modal-close-btn" aria-label="Chiudi scheda">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="modalReadMode">
+          <h2 id="modalTitle" class="modal-node-title">Titolo Scheda</h2>
+          <div id="modalContent" class="modal-node-content">
+            Contenuto dettagliato dell'argomento...
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer-nav" aria-label="Navigazione nodi">
+        <button id="modalPrevBtn" class="pixel-btn" type="button">← PRECEDENTE</button>
+        <span id="modalCounter">1 / 1</span>
+        <button id="modalNextBtn" class="pixel-btn" type="button">SUCCESSIVA →</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="audio.js"></script>
+  <script src="canvas.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
