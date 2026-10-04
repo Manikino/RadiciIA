@@ -46,6 +46,7 @@ class PixelTreeCanvas {
 
     this.animFrame = null;
     this.time = 0;
+    this.isPaused = false;
 
     this.init();
   }
@@ -94,6 +95,20 @@ class PixelTreeCanvas {
   resizeCanvas() {
     this.canvas.width = window.innerWidth;
     this.canvas.height = this.virtualHeight;
+  }
+
+  pause() {
+    this.isPaused = true;
+    if (this.animFrame !== null) {
+      cancelAnimationFrame(this.animFrame);
+      this.animFrame = null;
+    }
+  }
+
+  resume() {
+    if (!this.isPaused) return;
+    this.isPaused = false;
+    this.animate();
   }
 
   getNodeById(id) {
@@ -942,12 +957,14 @@ class PixelTreeCanvas {
       this.ctx.fillRect(x, y - (isDragging ? 3 : 2), 8, isDragging ? 6 : 4);
     }
 
+    const barWidth = Math.min(600, Math.max(0, w - 24));
+    const barLeft = (w - barWidth) / 2;
     this.ctx.fillStyle = isDragging ? "rgba(0,0,0,0.95)" : "rgba(0,0,0,0.85)";
-    this.ctx.fillRect(w / 2 - 300, y - 16, 600, 32);
+    this.ctx.fillRect(barLeft, y - 16, barWidth, 32);
 
     this.ctx.strokeStyle = isDragging ? "#ffffff" : colorLower;
     this.ctx.lineWidth = isDragging ? 3 : 2;
-    this.ctx.strokeRect(w / 2 - 300, y - 16, 600, 32);
+    this.ctx.strokeRect(barLeft, y - 16, barWidth, 32);
 
     let displayText = text;
     if (this.isAdminMode) {
@@ -956,9 +973,22 @@ class PixelTreeCanvas {
 
     this.ctx.font = 'bold 10px "Press Start 2P", monospace';
     this.ctx.fillStyle = isDragging ? "#ffffff" : colorLower;
-    this.ctx.textAlign = "center";
     this.ctx.textBaseline = "middle";
-    this.ctx.fillText(displayText, w / 2, y);
+    this.ctx.save();
+    const textLeft = barLeft + 10;
+    const textRight = barLeft + barWidth - 10;
+    this.ctx.beginPath();
+    this.ctx.rect(textLeft, y - 14, Math.max(0, textRight - textLeft), 28);
+    this.ctx.clip();
+    this.ctx.textAlign = "left";
+    const textWidth = this.ctx.measureText(displayText).width;
+    const gap = 56;
+    const cycleWidth = textWidth + gap;
+    const offset = (this.time * 0.8) % cycleWidth;
+    for (let x = textLeft - offset; x < textRight; x += cycleWidth) {
+      this.ctx.fillText(displayText, x, y);
+    }
+    this.ctx.restore();
 
     this.ctx.restore();
   }
@@ -1335,6 +1365,7 @@ class PixelTreeCanvas {
   }
 
   animate() {
+    if (this.isPaused) return;
     this.time++;
 
     this.mouse.x += (this.mouse.targetX - this.mouse.x) * 0.08;

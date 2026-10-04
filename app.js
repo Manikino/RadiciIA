@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let isGridView = false;
   let isAudioReady = false;
   let marqueeUpdateFrame = 0;
+  let searchUpdateTimer = 0;
 
   function syncAudioLabels() {
     if (!musicToggleBtn) return;
@@ -272,9 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.documentElement.style.setProperty('--header-accent', accent);
     header.style.setProperty('--header-accent', accent);
-    header.style.borderBottomColor = accent;
     header.style.boxShadow = `0 4px 20px ${accent}33`;
-    header.style.color = accent;
   }
 
   function renderGridView(query = '') {
@@ -327,7 +326,8 @@ document.addEventListener('DOMContentLoaded', () => {
   searchInput.addEventListener('input', (event) => {
     const value = event.target.value.trim();
     if (isGridView) {
-      renderGridView(value);
+      window.clearTimeout(searchUpdateTimer);
+      searchUpdateTimer = window.setTimeout(() => renderGridView(value), 100);
     }
   });
 
@@ -360,16 +360,27 @@ document.addEventListener('DOMContentLoaded', () => {
   viewToggleBtn.addEventListener('click', () => {
     pixelAudio.playHover();
     isGridView = !isGridView;
+    window.clearTimeout(searchUpdateTimer);
 
     if (isGridView) {
       posterContainer.style.display = 'none';
+      canvasEngine.pause();
       gridViewContainer.classList.add('active');
       viewToggleBtn.textContent = 'POSTER';
       renderGridView();
     } else {
       posterContainer.style.display = 'block';
       gridViewContainer.classList.remove('active');
+      canvasEngine.resume();
       viewToggleBtn.textContent = 'GRIGLIA';
+    }
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      canvasEngine.pause();
+    } else if (!isGridView) {
+      canvasEngine.resume();
     }
   });
 
