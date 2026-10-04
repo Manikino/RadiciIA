@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Control Toolbar Elements
   const searchInput = document.getElementById('searchInput');
+  const mobileControlsToggle = document.getElementById('mobileControlsToggle');
+  const navControls = document.getElementById('navControls');
   const musicToggleBtn = document.getElementById('musicToggleBtn');
   const sfxToggleBtn = document.getElementById('sfxToggleBtn');
   const musicVolumeSlider = document.getElementById('musicVolumeSlider');
@@ -36,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const currentMusicTitleEl = document.getElementById('currentMusicTitle');
   const adventureIntro = document.getElementById('adventureIntro');
   const startAdventureBtn = document.getElementById('startAdventureBtn');
+  const mobileControlsQuery = window.matchMedia('(max-width: 768px)');
 
   let activeNodeIndex = 0;
   let isGridView = false;
@@ -75,6 +78,24 @@ document.addEventListener('DOMContentLoaded', () => {
       sfxToggleBtn.setAttribute('aria-label', pixelAudio.sfxMuted ? 'Riattiva gli effetti sonori' : 'Disattiva gli effetti sonori');
     }
   }
+
+  function setMobileControlsExpanded(expanded) {
+    mobileControlsToggle.setAttribute('aria-expanded', String(expanded));
+    mobileControlsToggle.textContent = expanded ? 'NASCONDI' : 'MOSTRA';
+    navControls.classList.toggle('is-expanded', expanded);
+  }
+
+  mobileControlsToggle.addEventListener('click', () => {
+    const expanded = mobileControlsToggle.getAttribute('aria-expanded') === 'true';
+    setMobileControlsExpanded(!expanded);
+  });
+
+  mobileControlsQuery.addEventListener('change', (event) => {
+    if (!event.matches) setMobileControlsExpanded(false);
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) setMobileControlsExpanded(false);
+  }, { passive: true });
 
   function updateMusicMarquee(name) {
     if (!currentMusicTitleEl) return;

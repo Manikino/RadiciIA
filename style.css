@@ -702,6 +702,10 @@ body {
   text-shadow: 2px 2px 0px #003822;
 }
 
+.pixel-btn.mobile-controls-toggle {
+  display: none;
+}
+
 .brand-icon {
   width: 24px;
   height: 24px;
@@ -1292,9 +1296,50 @@ body {
 
 @media (max-width: 768px) {
   .pixel-header {
-    flex-direction: column;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
   }
+
+  .brand-title {
+    min-width: 0;
+    font-size: 10px;
+  }
+
+  .brand-title h1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .brand-icon {
+    flex: 0 0 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .pixel-btn.mobile-controls-toggle {
+    display: inline-flex;
+    min-height: 36px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-controls {
+    grid-column: 1 / -1;
+    display: none;
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .nav-controls.is-expanded {
+    display: flex;
+  }
+
   .admin-toolbar-inner {
     flex-direction: column;
     align-items: stretch;
