@@ -79,23 +79,35 @@
         <button id="nextMusicBtn" class="pixel-btn music-btn" type="button" aria-label="Traccia successiva">►</button>
       </div>
 
-      <button class="pixel-btn tier-low" data-jump="350" type="button">MINIMO</button>
-      <button class="pixel-btn tier-high" data-jump="1200" type="button">ALTO RISCHIO</button>
-      <button class="pixel-btn tier-unacceptable" data-jump="2050" type="button">INACCETTABILE</button>
+      <div class="tier-jump-controls">
+        <button class="pixel-btn tier-low" data-jump="350" type="button">MINIMO</button>
+        <button class="pixel-btn tier-high" data-jump="1200" type="button">ALTO RISCHIO</button>
+        <button class="pixel-btn tier-unacceptable" data-jump="2050" type="button">INACCETTABILE</button>
+      </div>
 
       <div class="search-wrapper">
         <input type="text" id="searchInput" class="pixel-input" placeholder="Cerca..." aria-label="Cerca tra gli argomenti">
       </div>
 
-      <label class="range-control" for="musicVolumeSlider">
+      <label class="range-control volume-range-control" for="musicVolumeSlider">
         <span>VOLUME MUSICA</span>
         <input id="musicVolumeSlider" type="range" min="0" max="100" value="100" aria-label="Volume musica">
         <output id="musicVolumeValue" for="musicVolumeSlider">100%</output>
       </label>
-      <label class="range-control" for="sfxVolumeSlider">
+      <label class="range-control audio-toggle-control" for="musicToggleSwitch">
+        <span>MUSICA</span>
+        <input id="musicToggleSwitch" class="audio-toggle-switch" type="checkbox" role="switch" checked aria-label="Musica sì o no">
+        <output id="musicToggleValue" for="musicToggleSwitch">ON</output>
+      </label>
+      <label class="range-control volume-range-control" for="sfxVolumeSlider">
         <span>VOLUME SUONI</span>
         <input id="sfxVolumeSlider" type="range" min="0" max="100" value="100" aria-label="Volume effetti sonori">
         <output id="sfxVolumeValue" for="sfxVolumeSlider">100%</output>
+      </label>
+      <label class="range-control audio-toggle-control" for="sfxToggleSwitch">
+        <span>SUONI</span>
+        <input id="sfxToggleSwitch" class="audio-toggle-switch" type="checkbox" role="switch" checked aria-label="Suoni sì o no">
+        <output id="sfxToggleValue" for="sfxToggleSwitch">ON</output>
       </label>
       <button id="crtToggleBtn" class="pixel-btn" type="button" aria-label="Attiva o disattiva effetto CRT">CRT ON</button>
       <button id="viewToggleBtn" class="pixel-btn" type="button" aria-label="Passa tra poster e griglia">GRIGLIA</button>

@@ -712,6 +712,10 @@ body {
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.tier-jump-controls {
+  display: contents;
   justify-content: flex-start;
 }
 
@@ -739,6 +743,43 @@ body {
 .range-control output {
   min-width: 32px;
   text-align: right;
+}
+
+.audio-toggle-control {
+  display: none;
+}
+
+.audio-toggle-switch {
+  appearance: none;
+  position: relative;
+  width: 44px;
+  height: 24px;
+  min-width: 44px;
+  margin: 0;
+  border: 2px solid var(--header-accent);
+  background: #090e17;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.audio-toggle-switch::before {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: var(--header-accent);
+  content: "";
+  transition: transform 0.15s ease;
+}
+
+.audio-toggle-switch:checked::before {
+  transform: translateX(20px);
+}
+
+.audio-toggle-switch:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
 }
 
 /* Admin Sub-Toolbar */
@@ -1273,6 +1314,61 @@ body {
   .pixel-header {
     flex-direction: column;
     align-items: stretch;
+    gap: 6px;
+    padding: 6px 10px;
+  }
+
+  .brand-title {
+    gap: 7px;
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  .brand-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .nav-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+  }
+
+  #musicControl,
+  .tier-jump-controls,
+  .nav-controls > .search-wrapper {
+    grid-column: 1 / -1;
+  }
+
+  .tier-jump-controls {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+  }
+
+  .nav-controls > .pixel-btn,
+  .nav-controls > .range-control,
+  .nav-controls > .search-wrapper {
+    min-height: 30px;
+  }
+
+  .nav-controls > .pixel-btn {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+    padding: 6px 4px;
+  }
+
+  .tier-jump-controls > .pixel-btn {
+    min-width: 0;
+    justify-content: center;
+    padding: 6px 3px;
+  }
+
+  .nav-controls > .search-wrapper .pixel-input {
+    width: 100%;
+    min-height: 32px;
   }
   .admin-toolbar-inner {
     flex-direction: column;
@@ -1299,6 +1395,38 @@ body {
     flex: 1;
     width: auto;
     min-height: 32px;
+  }
+
+  .volume-range-control {
+    display: none;
+  }
+
+  .audio-toggle-control {
+    display: inline-flex;
+    width: 100%;
+    min-height: 32px;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 3px 7px;
+  }
+
+  .audio-toggle-control output {
+    min-width: 38px;
+  }
+
+  .audio-toggle-switch {
+    width: 38px;
+    height: 22px;
+    min-width: 38px;
+  }
+
+  .audio-toggle-switch::before {
+    width: 14px;
+    height: 14px;
+  }
+
+  .audio-toggle-switch:checked::before {
+    transform: translateX(16px);
   }
 
 }

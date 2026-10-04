@@ -25,6 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('searchInput');
   const musicVolumeSlider = document.getElementById('musicVolumeSlider');
   const sfxVolumeSlider = document.getElementById('sfxVolumeSlider');
+  const musicVolumeValue = document.getElementById('musicVolumeValue');
+  const sfxVolumeValue = document.getElementById('sfxVolumeValue');
+  const musicToggleSwitch = document.getElementById('musicToggleSwitch');
+  const sfxToggleSwitch = document.getElementById('sfxToggleSwitch');
+  const musicToggleValue = document.getElementById('musicToggleValue');
+  const sfxToggleValue = document.getElementById('sfxToggleValue');
+  const compactAudioControls = window.matchMedia('(max-width: 768px)');
   const crtToggleBtn = document.getElementById('crtToggleBtn');
   const viewToggleBtn = document.getElementById('viewToggleBtn');
   const crtOverlay = document.getElementById('crtOverlay');
@@ -49,9 +56,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function syncAudioControlMode() {
+    musicToggleSwitch.checked = pixelAudio.musicVolume > 0;
+    sfxToggleSwitch.checked = pixelAudio.sfxVolume > 0;
+    musicToggleValue.value = musicToggleSwitch.checked ? 'ON' : 'OFF';
+    sfxToggleValue.value = sfxToggleSwitch.checked ? 'ON' : 'OFF';
+  }
+
   prepareTextScaling();
   document.documentElement.classList.add('text-scale-ready');
   document.documentElement.style.setProperty('--text-scale', '0.75');
+  syncAudioControlMode();
+  compactAudioControls.addEventListener('change', syncAudioControlMode);
+  window.addEventListener('resize', syncAudioControlMode);
 
   function updateMusicMarquee(name) {
     if (!currentMusicTitleEl) return;
@@ -350,15 +367,33 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   musicVolumeSlider.addEventListener('input', () => {
-    const volume = Number(musicVolumeSlider.value);
-    pixelAudio.setMusicVolume(volume / 100);
-    document.getElementById('musicVolumeValue').value = `${volume}%`;
+    const volume = Number(musicVolumeSlider.value) / 100;
+    pixelAudio.setMusicVolume(volume);
+    musicVolumeValue.value = `${Math.round(volume * 100)}%`;
+    syncAudioControlMode();
   });
 
   sfxVolumeSlider.addEventListener('input', () => {
-    const volume = Number(sfxVolumeSlider.value);
-    pixelAudio.setSfxVolume(volume / 100);
-    document.getElementById('sfxVolumeValue').value = `${volume}%`;
+    const volume = Number(sfxVolumeSlider.value) / 100;
+    pixelAudio.setSfxVolume(volume);
+    sfxVolumeValue.value = `${Math.round(volume * 100)}%`;
+    syncAudioControlMode();
+  });
+
+  musicToggleSwitch.addEventListener('change', () => {
+    const volume = musicToggleSwitch.checked ? 1 : 0;
+    pixelAudio.setMusicVolume(volume);
+    musicToggleValue.value = musicToggleSwitch.checked ? 'ON' : 'OFF';
+    musicVolumeSlider.value = String(volume * 100);
+    musicVolumeValue.value = `${volume * 100}%`;
+  });
+
+  sfxToggleSwitch.addEventListener('change', () => {
+    const volume = sfxToggleSwitch.checked ? 1 : 0;
+    pixelAudio.setSfxVolume(volume);
+    sfxToggleValue.value = sfxToggleSwitch.checked ? 'ON' : 'OFF';
+    sfxVolumeSlider.value = String(volume * 100);
+    sfxVolumeValue.value = `${volume * 100}%`;
   });
 
   crtToggleBtn.addEventListener('click', () => {
