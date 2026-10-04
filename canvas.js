@@ -47,7 +47,7 @@ class PixelTreeCanvas {
     this.animFrame = null;
     this.time = 0;
     this.isPaused = false;
-    this.textScale = 0.8;
+    this.textScale = 0.75;
 
     this.init();
   }

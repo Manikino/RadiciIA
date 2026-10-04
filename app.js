@@ -23,22 +23,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Control Toolbar Elements
   const searchInput = document.getElementById('searchInput');
-  const mobileControlsToggle = document.getElementById('mobileControlsToggle');
-  const navControls = document.getElementById('navControls');
-  const musicToggleBtn = document.getElementById('musicToggleBtn');
-  const sfxToggleBtn = document.getElementById('sfxToggleBtn');
   const musicVolumeSlider = document.getElementById('musicVolumeSlider');
   const sfxVolumeSlider = document.getElementById('sfxVolumeSlider');
-  const textScaleToggleBtn = document.getElementById('textScaleToggleBtn');
-  const textScalePanel = document.getElementById('textScalePanel');
-  const textScaleSlider = document.getElementById('textScaleSlider');
   const crtToggleBtn = document.getElementById('crtToggleBtn');
   const viewToggleBtn = document.getElementById('viewToggleBtn');
   const crtOverlay = document.getElementById('crtOverlay');
   const currentMusicTitleEl = document.getElementById('currentMusicTitle');
   const adventureIntro = document.getElementById('adventureIntro');
   const startAdventureBtn = document.getElementById('startAdventureBtn');
-  const mobileControlsQuery = window.matchMedia('(max-width: 768px)');
 
   let activeNodeIndex = 0;
   let isGridView = false;
@@ -57,45 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function updateTextScale() {
-    const scale = Number(textScaleSlider.value);
-    document.documentElement.style.setProperty('--text-scale', String(scale / 100));
-    document.getElementById('textScaleValue').value = `${scale}%`;
-    canvasEngine.setTextScale(scale / 100);
-  }
-
   prepareTextScaling();
   document.documentElement.classList.add('text-scale-ready');
   document.documentElement.style.setProperty('--text-scale', '0.75');
-
-  function syncAudioLabels() {
-    if (!musicToggleBtn) return;
-    musicToggleBtn.textContent = pixelAudio.musicMuted ? 'MUSICA OFF' : 'MUSICA ON';
-    musicToggleBtn.setAttribute('aria-label', pixelAudio.musicMuted ? 'Riattiva la musica' : 'Disattiva la musica');
-
-    if (sfxToggleBtn) {
-      sfxToggleBtn.textContent = pixelAudio.sfxMuted ? 'SUONI OFF' : 'SUONI ON';
-      sfxToggleBtn.setAttribute('aria-label', pixelAudio.sfxMuted ? 'Riattiva gli effetti sonori' : 'Disattiva gli effetti sonori');
-    }
-  }
-
-  function setMobileControlsExpanded(expanded) {
-    mobileControlsToggle.setAttribute('aria-expanded', String(expanded));
-    mobileControlsToggle.textContent = expanded ? 'NASCONDI' : 'MOSTRA';
-    navControls.classList.toggle('is-expanded', expanded);
-  }
-
-  mobileControlsToggle.addEventListener('click', () => {
-    const expanded = mobileControlsToggle.getAttribute('aria-expanded') === 'true';
-    setMobileControlsExpanded(!expanded);
-  });
-
-  mobileControlsQuery.addEventListener('change', (event) => {
-    if (!event.matches) setMobileControlsExpanded(false);
-  });
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) setMobileControlsExpanded(false);
-  }, { passive: true });
 
   function updateMusicMarquee(name) {
     if (!currentMusicTitleEl) return;
@@ -164,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
   pixelAudio.sfxFolder = 'Sfx';
 
   const canvasEngine = new PixelTreeCanvas(canvasEl, NODE_ITEMS, RISK_SECTIONS, NODE_LINKS);
+  canvasEngine.setTextScale(0.75);
   canvasEngine.setDefaultBackgroundImage('assets/default-roots-bg.jpg');
 
   try {
@@ -392,16 +349,6 @@ document.addEventListener('DOMContentLoaded', () => {
     pixelAudio.nextBGM();
   });
 
-  musicToggleBtn.addEventListener('click', () => {
-    pixelAudio.toggleMusic();
-    syncAudioLabels();
-  });
-
-  sfxToggleBtn.addEventListener('click', () => {
-    pixelAudio.toggleSfx();
-    syncAudioLabels();
-  });
-
   musicVolumeSlider.addEventListener('input', () => {
     const volume = Number(musicVolumeSlider.value);
     pixelAudio.setMusicVolume(volume / 100);
@@ -412,13 +359,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const volume = Number(sfxVolumeSlider.value);
     pixelAudio.setSfxVolume(volume / 100);
     document.getElementById('sfxVolumeValue').value = `${volume}%`;
-  });
-
-  textScaleSlider.addEventListener('input', updateTextScale);
-  textScaleToggleBtn.addEventListener('click', () => {
-    const isExpanded = textScaleToggleBtn.getAttribute('aria-expanded') === 'true';
-    textScaleToggleBtn.setAttribute('aria-expanded', String(!isExpanded));
-    textScalePanel.hidden = isExpanded;
   });
 
   crtToggleBtn.addEventListener('click', () => {
@@ -454,8 +394,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  syncAudioLabels();
-  updateTextScale();
   updateMusicMarquee(currentMusicTitleEl ? currentMusicTitleEl.getAttribute('aria-label') : '');
   updateHotbarAccent();
   window.addEventListener('scroll', updateHotbarAccent, { passive: true });
