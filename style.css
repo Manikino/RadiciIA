@@ -2,7 +2,13 @@
    LE RADICI DELL'IA - PIXEL ART STYLESHEET (ADMIN MODE ENHANCED)
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap');
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('assets/PressStart2P-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 
 :root {
   --bg-dark: #070a0e;
@@ -24,9 +30,11 @@
   --unacceptable-border: #b80036;
   --unacceptable-glow: rgba(255, 42, 109, 0.5);
 
+  --scrollbar-accent: var(--low-primary);
+
   --font-arcade: 'Press Start 2P', monospace;
-  --font-pixel: 'Pixelify Sans', sans-serif;
-  --font-silk: 'Silkscreen', monospace;
+  --font-pixel: 'Press Start 2P', monospace;
+  --font-silk: 'Press Start 2P', monospace;
 }
 
 * {
@@ -592,18 +600,23 @@ body {
 
 ::-webkit-scrollbar-track {
   background: #090e17;
-  border-left: 2px solid #1a2638;
+  border-left: 2px solid var(--scrollbar-accent);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #00ff9d;
+  background: var(--scrollbar-accent);
   border: 2px solid #04120c;
-  box-shadow: inset -2px -2px 0px #00a86b;
+  box-shadow: inset -2px -2px 0px var(--scrollbar-accent);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ffb700;
-  box-shadow: inset -2px -2px 0px #b38000;
+  background: var(--scrollbar-accent);
+  box-shadow: inset -2px -2px 0px var(--scrollbar-accent);
+}
+
+* {
+  scrollbar-color: var(--scrollbar-accent) #090e17;
+  scrollbar-width: thin;
 }
 
 /* CRT Scanline Overlay */
@@ -704,6 +717,49 @@ body {
   flex-wrap: wrap;
   gap: 10px;
   justify-content: flex-start;
+}
+
+.range-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 5px 8px;
+  color: var(--header-accent);
+  border: 2px solid var(--header-accent);
+  background: #101925;
+  font-family: var(--font-arcade);
+  font-size: 7px;
+}
+
+.range-control input[type="range"] {
+  width: 90px;
+  min-width: 64px;
+  accent-color: var(--header-accent);
+  cursor: pointer;
+  touch-action: pan-x;
+}
+
+.range-control output {
+  min-width: 32px;
+  text-align: right;
+}
+
+.text-scale-control {
+  position: relative;
+}
+
+.text-scale-panel {
+  position: absolute;
+  z-index: 110;
+  top: calc(100% + 8px);
+  right: 0;
+  width: max-content;
+  box-shadow: 4px 4px 0 #000;
+}
+
+.text-scale-panel[hidden] {
+  display: none;
 }
 
 /* Admin Sub-Toolbar */
@@ -1254,6 +1310,32 @@ body {
     flex-basis: min(40vw, 240px);
     width: min(40vw, 240px);
   }
+
+  .range-control {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .range-control input[type="range"] {
+    flex: 1;
+    width: auto;
+    min-height: 32px;
+  }
+
+  .text-scale-control {
+    width: 100%;
+  }
+
+  .text-scale-control > .pixel-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .text-scale-panel {
+    position: static;
+    width: 100%;
+    margin-top: 8px;
+  }
 }
 
 @media (hover: none) and (pointer: coarse) {
@@ -1276,4 +1358,8 @@ body {
   .music-title-copy[data-marquee-copy] {
     display: none;
   }
+}
+
+html.text-scale-ready * {
+  font-size: calc(var(--text-base-size, 1em) * var(--text-scale, 0.75)) !important;
 }

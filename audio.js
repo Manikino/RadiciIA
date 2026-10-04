@@ -4,6 +4,9 @@ class PixelSoundEngine {
     this.muted = false;
     this.musicMuted = false;
     this.sfxMuted = false;
+    this.musicVolume = 1;
+    this.sfxVolume = 1;
+    this.sfxGain = null;
     this.initialized = false;
 
     // BGM System
@@ -32,6 +35,9 @@ class PixelSoundEngine {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (AudioCtx) {
         this.ctx = new AudioCtx();
+        this.sfxGain = this.ctx.createGain();
+        this.sfxGain.gain.value = this.sfxVolume;
+        this.sfxGain.connect(this.ctx.destination);
         this.initialized = true;
       }
     } catch (e) {
@@ -91,6 +97,19 @@ class PixelSoundEngine {
     });
 
     return this.sfxMuted;
+  }
+
+  setMusicVolume(volume) {
+    this.musicVolume = Math.max(0, Math.min(1, Number(volume)));
+    if (this.bgm) this.bgm.volume = this.musicVolume;
+  }
+
+  setSfxVolume(volume) {
+    this.sfxVolume = Math.max(0, Math.min(1, Number(volume)));
+    if (this.sfxGain) this.sfxGain.gain.setValueAtTime(this.sfxVolume, this.ctx.currentTime);
+    this.activeSfx.forEach((sfx) => {
+      if (sfx) sfx.volume = 0.9 * this.sfxVolume;
+    });
   }
 
   toggleMute() {
@@ -258,7 +277,7 @@ class PixelSoundEngine {
     this.bgm = new Audio(audioUrl);
     this.bgm.loop = false;
     this.bgm.muted = this.musicMuted;
-    this.bgm.volume = fadeInMs > 0 ? 0 : 1;
+    this.bgm.volume = fadeInMs > 0 ? 0 : this.musicVolume;
     this.bgm.onended = () => this.playBGM();
 
     const audio = this.bgm;
@@ -270,7 +289,7 @@ class PixelSoundEngine {
         const fadeFrame = (now) => {
           if (audio !== this.bgm) return;
           const progress = Math.min((now - startedAt) / fadeInMs, 1);
-          audio.volume = progress;
+          audio.volume = progress * this.musicVolume;
           if (progress < 1) requestAnimationFrame(fadeFrame);
         };
         requestAnimationFrame(fadeFrame);
@@ -311,7 +330,7 @@ class PixelSoundEngine {
 
     this.ensureContext();
     const sfx = new Audio(encodeURI(`${this.sfxFolder}/${safeName}`));
-    sfx.volume = 0.9;
+    sfx.volume = 0.9 * this.sfxVolume;
     sfx.muted = this.sfxMuted;
     sfx.play().catch((error) => console.warn('SFX Playback failed:', error));
     this.activeSfx.push(sfx);
@@ -334,11 +353,11 @@ class PixelSoundEngine {
       osc.frequency.setValueAtTime(440, this.ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.05);
 
-      gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+      gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.05);
 
       osc.connect(gain);
-      gain.connect(this.ctx.destination);
+      gain.connect(this.sfxGain);
 
       osc.start();
       osc.stop(this.ctx.currentTime + 0.05);
@@ -370,11 +389,11 @@ class PixelSoundEngine {
         osc.type = oscType;
         osc.frequency.setValueAtTime(freq, now + idx * 0.04);
 
-        gain.gain.setValueAtTime(0.06, now + idx * 0.04);
+        gain.gain.setValueAtTime(0.42, now + idx * 0.04);
         gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.04 + 0.1);
 
         osc.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(this.sfxGain);
 
         osc.start(now + idx * 0.04);
         osc.stop(now + idx * 0.04 + 0.1);
@@ -396,11 +415,11 @@ class PixelSoundEngine {
       osc.frequency.setValueAtTime(600, now);
       osc.frequency.exponentialRampToValueAtTime(200, now + 0.08);
 
-      gain.gain.setValueAtTime(0.05, now);
+      gain.gain.setValueAtTime(0.36, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
 
       osc.connect(gain);
-      gain.connect(this.ctx.destination);
+      gain.connect(this.sfxGain);
 
       osc.start(now);
       osc.stop(now + 0.08);

@@ -47,6 +47,7 @@ class PixelTreeCanvas {
     this.animFrame = null;
     this.time = 0;
     this.isPaused = false;
+    this.textScale = 0.8;
 
     this.init();
   }
@@ -109,6 +110,10 @@ class PixelTreeCanvas {
     if (!this.isPaused) return;
     this.isPaused = false;
     this.animate();
+  }
+
+  setTextScale(scale) {
+    this.textScale = Math.max(0, Math.min(1, Number(scale)));
   }
 
   getNodeById(id) {
@@ -971,7 +976,7 @@ class PixelTreeCanvas {
       displayText = `↕ [TRASCINA PER ALZARE/ABBASSARE] : Y=${Math.round(y)}px`;
     }
 
-    this.ctx.font = 'bold 10px "Press Start 2P", monospace';
+    this.ctx.font = `bold ${10 * this.textScale}px "Press Start 2P", monospace`;
     this.ctx.fillStyle = isDragging ? "#ffffff" : colorLower;
     this.ctx.textBaseline = "middle";
     this.ctx.save();
@@ -1211,7 +1216,7 @@ class PixelTreeCanvas {
         this.ctx.shadowBlur = 8;
         this.ctx.fillRect(pos.x - 24, pos.y - 30, 48, 14);
 
-        this.ctx.font = 'bold 8px "Press Start 2P"';
+        this.ctx.font = `bold ${8 * this.textScale}px "Press Start 2P"`;
         this.ctx.fillStyle = "#ffffff";
         this.ctx.textAlign = "center";
         this.ctx.fillText(badgeText, pos.x, pos.y - 20);
@@ -1280,14 +1285,14 @@ class PixelTreeCanvas {
       this.ctx.fillRect(pos.x - 5, pos.y - 5, 10, 10);
 
       if (isDragging) {
-        this.ctx.font = 'bold 10px "Press Start 2P"';
+        this.ctx.font = `bold ${10 * this.textScale}px "Press Start 2P"`;
         this.ctx.fillStyle = "#ffffff";
         this.ctx.shadowColor = "#000000";
         this.ctx.shadowBlur = 4;
         this.ctx.fillText(`X:${(node.relX * 100).toFixed(1)}% Y:${Math.round(node.relY)}px`, pos.x, pos.y - baseSize - 36);
       }
 
-      this.ctx.font = (isHovered || isDragging) ? 'bold 12px "Pixelify Sans", sans-serif' : '11px "Pixelify Sans", sans-serif';
+      this.ctx.font = `${isHovered || isDragging ? 'bold ' : ''}${(isHovered || isDragging ? 12 : 11) * this.textScale}px "Press Start 2P", monospace`;
       this.ctx.fillStyle = (isHovered || isDragging) ? "#ffffff" : "rgba(255, 255, 255, 0.9)";
       this.ctx.textAlign = "center";
       this.ctx.textBaseline = "top";
@@ -1331,7 +1336,7 @@ class PixelTreeCanvas {
     this.ctx.strokeStyle = "#00e5ff";
     this.ctx.lineWidth = 2;
     this.ctx.strokeRect(16, y, 620, 58);
-    this.ctx.font = '8px "Press Start 2P", monospace';
+    this.ctx.font = `${8 * this.textScale}px "Press Start 2P", monospace`;
     this.ctx.fillStyle = "#00e5ff";
     this.ctx.textAlign = "left";
     this.ctx.textBaseline = "middle";
@@ -1355,7 +1360,7 @@ class PixelTreeCanvas {
     this.ctx.lineDashOffset = -this.time * 0.3;
     this.ctx.strokeRect(16, y, 680, 58);
     this.ctx.setLineDash([]);
-    this.ctx.font = '8px "Press Start 2P", monospace';
+    this.ctx.font = `${8 * this.textScale}px "Press Start 2P", monospace`;
     this.ctx.fillStyle = "#ff2a6d";
     this.ctx.textAlign = "left";
     this.ctx.textBaseline = "middle";

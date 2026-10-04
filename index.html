@@ -88,9 +88,27 @@
       </div>
 
       <button id="musicToggleBtn" class="pixel-btn" type="button" aria-label="Disattiva o riattiva la musica">MUSICA ON</button>
+      <label class="range-control" for="musicVolumeSlider">
+        <span>VOLUME MUSICA</span>
+        <input id="musicVolumeSlider" type="range" min="0" max="100" value="100" aria-label="Volume musica">
+        <output id="musicVolumeValue" for="musicVolumeSlider">100%</output>
+      </label>
       <button id="sfxToggleBtn" class="pixel-btn" type="button" aria-label="Disattiva o riattiva gli effetti sonori">SUONI ON</button>
+      <label class="range-control" for="sfxVolumeSlider">
+        <span>VOLUME SUONI</span>
+        <input id="sfxVolumeSlider" type="range" min="0" max="100" value="100" aria-label="Volume effetti sonori">
+        <output id="sfxVolumeValue" for="sfxVolumeSlider">100%</output>
+      </label>
       <button id="crtToggleBtn" class="pixel-btn" type="button" aria-label="Attiva o disattiva effetto CRT">CRT ON</button>
       <button id="viewToggleBtn" class="pixel-btn" type="button" aria-label="Passa tra poster e griglia">GRIGLIA</button>
+      <div class="text-scale-control">
+        <button id="textScaleToggleBtn" class="pixel-btn" type="button" aria-expanded="false" aria-controls="textScalePanel">GRANDEZZA TESTO</button>
+        <label id="textScalePanel" class="range-control text-scale-panel" for="textScaleSlider" hidden>
+          <span>GRANDEZZA TESTO</span>
+          <input id="textScaleSlider" type="range" min="0" max="100" value="75" aria-label="Grandezza testo">
+          <output id="textScaleValue" for="textScaleSlider">75%</output>
+        </label>
+      </div>
     </div>
   </header>
 

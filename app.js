@@ -25,6 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('searchInput');
   const musicToggleBtn = document.getElementById('musicToggleBtn');
   const sfxToggleBtn = document.getElementById('sfxToggleBtn');
+  const musicVolumeSlider = document.getElementById('musicVolumeSlider');
+  const sfxVolumeSlider = document.getElementById('sfxVolumeSlider');
+  const textScaleToggleBtn = document.getElementById('textScaleToggleBtn');
+  const textScalePanel = document.getElementById('textScalePanel');
+  const textScaleSlider = document.getElementById('textScaleSlider');
   const crtToggleBtn = document.getElementById('crtToggleBtn');
   const viewToggleBtn = document.getElementById('viewToggleBtn');
   const crtOverlay = document.getElementById('crtOverlay');
@@ -37,6 +42,28 @@ document.addEventListener('DOMContentLoaded', () => {
   let isAudioReady = false;
   let marqueeUpdateFrame = 0;
   let searchUpdateTimer = 0;
+  const scaledTextElements = new WeakSet();
+
+  function prepareTextScaling(root = document.body) {
+    const elements = [root, ...root.querySelectorAll('*')];
+    const unscaledElements = elements.filter((element) => !scaledTextElements.has(element));
+    const baseSizes = unscaledElements.map((element) => getComputedStyle(element).fontSize);
+    unscaledElements.forEach((element, index) => {
+      element.style.setProperty('--text-base-size', baseSizes[index]);
+      scaledTextElements.add(element);
+    });
+  }
+
+  function updateTextScale() {
+    const scale = Number(textScaleSlider.value);
+    document.documentElement.style.setProperty('--text-scale', String(scale / 100));
+    document.getElementById('textScaleValue').value = `${scale}%`;
+    canvasEngine.setTextScale(scale / 100);
+  }
+
+  prepareTextScaling();
+  document.documentElement.classList.add('text-scale-ready');
+  document.documentElement.style.setProperty('--text-scale', '0.75');
 
   function syncAudioLabels() {
     if (!musicToggleBtn) return;
@@ -178,6 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modalTitle.textContent = node.title;
     modalContent.textContent = node.content;
     modalContent.style.borderLeftColor = accentColor;
+    modalContent.style.setProperty('--scrollbar-accent', accentColor);
     modalCounter.textContent = `${activeNodeIndex + 1} / ${NODE_ITEMS.length}`;
     modalBackdrop.classList.add('active');
   }
@@ -272,6 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.documentElement.style.setProperty('--header-accent', accent);
+    document.documentElement.style.setProperty('--scrollbar-accent', accent);
     header.style.setProperty('--header-accent', accent);
     header.style.boxShadow = `0 4px 20px ${accent}33`;
   }
@@ -319,6 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
         wrapper.appendChild(card);
       });
 
+      prepareTextScaling(sectionEl);
       gridViewContainer.appendChild(sectionEl);
     });
   }
@@ -349,6 +379,25 @@ document.addEventListener('DOMContentLoaded', () => {
   sfxToggleBtn.addEventListener('click', () => {
     pixelAudio.toggleSfx();
     syncAudioLabels();
+  });
+
+  musicVolumeSlider.addEventListener('input', () => {
+    const volume = Number(musicVolumeSlider.value);
+    pixelAudio.setMusicVolume(volume / 100);
+    document.getElementById('musicVolumeValue').value = `${volume}%`;
+  });
+
+  sfxVolumeSlider.addEventListener('input', () => {
+    const volume = Number(sfxVolumeSlider.value);
+    pixelAudio.setSfxVolume(volume / 100);
+    document.getElementById('sfxVolumeValue').value = `${volume}%`;
+  });
+
+  textScaleSlider.addEventListener('input', updateTextScale);
+  textScaleToggleBtn.addEventListener('click', () => {
+    const isExpanded = textScaleToggleBtn.getAttribute('aria-expanded') === 'true';
+    textScaleToggleBtn.setAttribute('aria-expanded', String(!isExpanded));
+    textScalePanel.hidden = isExpanded;
   });
 
   crtToggleBtn.addEventListener('click', () => {
@@ -385,6 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   syncAudioLabels();
+  updateTextScale();
   updateMusicMarquee(currentMusicTitleEl ? currentMusicTitleEl.getAttribute('aria-label') : '');
   updateHotbarAccent();
   window.addEventListener('scroll', updateHotbarAccent, { passive: true });
